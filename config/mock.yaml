@@ -1,0 +1,80 @@
+name: sample-mock
+# advertised listening address. 
+hostname: 0.0.0.0
+# port
+port: 8080
+# config values for Pre-fligt/CORS request
+options:
+  accessControlAllowOrigin: '*'
+  accessControlAllowCredentials: 'true'
+  accessControlAllowHeaders: Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With
+  accessControlAllowMethods: POST,HEAD,PATCH, OPTIONS, GET, PUT
+# list of routes
+routes:
+    # HTTP Method
+  - method: POST
+    # endpoint target. Please notice the / character in the beginning endpoint.
+    endpoint: /product
+    # expected response
+    response:
+      # HTTP Response status code
+      statusCode: 201
+      # Custom response headers
+      headers:
+        - key: X-CUSTOM-HEADER
+          value: "1234567890"
+      # Response body.
+      body: |
+        {
+          "code": "200",
+          "message": "OK"
+        }
+  - method: GET
+    endpoint: /product
+    response:
+      statusCode: 200
+      headers:
+        - key: X-CUSTOM-HEADER
+          value: "1234567890"
+      body: |
+        {
+          "code": "200",
+          "message": "OK"
+        }
+  - method: GET
+    endpoint: /product/:product_id
+    response:
+      statusCode: 200
+      headers:
+        - key: X-CUSTOM-HEADER
+          value: "1234567890"
+      body: |
+        {
+          "code": "200",
+          "message": "OK"
+        }
+  # Path variables endpoints. 
+  # If you want to include your variables value in response,
+  # just put in the body with variable as same as in the url.
+  - method: GET
+    endpoint: /product/:product_id/status/:status_id
+    response:
+      statusCode: 200
+      headers:
+        - key: X-CUSTOM-HEADER
+          value: "1234567890"
+      body: |
+        {
+          "code": "200",
+          "message": "OK",
+          "mock_id": ":product_id",
+          "status_id": ":status_id"
+        }
+  - method: DELETE
+    endpoint: /product
+    response:
+      statusCode: 204
+      headers:
+        - key: X-CUSTOM-HEADER
+          value: "1234567890"
+      body:      
