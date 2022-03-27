@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"os"
 	"regexp"
 	"strings"
 
@@ -26,9 +27,11 @@ func CORSMiddleware(o parser.Options) gin.HandlerFunc {
 	}
 }
 
-type request_param struct {
-	param_name  string
-	param_value string
+func getenv(key, fallback string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+	return fallback
 }
 
 func handler(r parser.Route) gin.HandlerFunc {
@@ -53,8 +56,7 @@ func handler(r parser.Route) gin.HandlerFunc {
 
 func main() {
 	router := gin.Default()
-
-	c, e := parser.Parse_YAML("config/mock.yaml")
+	c, e := parser.Parse_YAML(getenv("MOCK_CONFIG_FILE", "config/mock.yaml"))
 	if e != nil {
 		panic(e)
 	}
