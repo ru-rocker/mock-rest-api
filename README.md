@@ -17,3 +17,14 @@ For config file references, please visit `config/mock.yaml`.
 
     go get .
     go run .
+
+# Dockerized
+
+
+    docker build -t rurocker/mock-rest-api:0.1 -t rurocker/mock-rest-api:latest .
+
+    
+    docker run -p8080:8080 --rm -it \
+       -v /v/rest-mock.yaml:/tmp/rest-mock.yaml \
+       -e MOCK_CONFIG_FILE=/tmp/rest-mock.yaml \
+       rurocker/mock-rest-api:local
