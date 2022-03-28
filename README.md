@@ -24,15 +24,22 @@ For instance:
 For configuratioin file references, please visit `config/mock.yaml`.
 
 # Run
+To run directly from the source
 
     go get .
     go run .
 
 # Dockerized
-
+To build the docker file - owner only :)
 
     docker build -t rurocker/mock-rest-api:0.1 -t rurocker/mock-rest-api:latest .
 
+
+This application is already on the docker hub.
+
+    docker pull rurocker/mock-rest-api:latest
+
+Run the container
 
     docker run -p8080:8080 --rm -it \
        -v /your-config-folder/your-config.yaml:/tmp/rest-mock.yaml \
