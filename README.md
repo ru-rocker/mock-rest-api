@@ -8,10 +8,12 @@ For now, this only for `content-type: application/json` data only.
 # Usage
 For starter, all you need to do only update the `config/mock.yaml` files. This is a default mode.
 
-Whenver you need more dynamic configuration files, set `MOCK_CONFIG_FILE` environment variable.
-The application will look at the environment variable for loading configuration.
+Whenver you need more dynamic configuration, set `MOCK_CONFIG_FILE` environment variable.
+The variable can retrieve a file path or an URL from the configuration file.
+The application will look at the environment variable then loading configuration.
+If the variable does not exist in, then it will load the default one.
 
-For config file references, please visit `config/mock.yaml`.
+For configuratioin file references, please visit `config/mock.yaml`.
 
 # Run
 

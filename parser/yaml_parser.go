@@ -1,7 +1,10 @@
 package parser
 
 import (
+	"io"
 	"io/ioutil"
+	"net/http"
+	"strings"
 
 	"gopkg.in/yaml.v2"
 )
@@ -36,9 +39,27 @@ type Route struct {
 
 func Parse_YAML(filename string) (Config, error) {
 	var config Config
-	data, err := ioutil.ReadFile(filename)
-	if err != nil {
-		return config, err
+
+	var data []byte
+	var err error
+	var response *http.Response
+
+	if strings.HasPrefix(filename, "http") {
+		response, err = http.Get(filename)
+		if err != nil {
+			return config, err
+		}
+		defer response.Body.Close()
+		n, e2 := io.ReadAll(response.Body)
+		if e2 != nil {
+			return config, e2
+		}
+		data = n
+	} else {
+		data, err = ioutil.ReadFile(filename)
+		if err != nil {
+			return config, nil
+		}
 	}
 
 	err = yaml.Unmarshal(data, &config)

@@ -46,7 +46,11 @@ func handler(r parser.Route) gin.HandlerFunc {
 		}
 
 		var raw map[string]interface{}
-		json.Unmarshal([]byte(body), &raw)
+		err := json.Unmarshal([]byte(body), &raw)
+		if err != nil {
+			panic(err)
+		}
+
 		for _, h := range r.Response.Headers {
 			c.Header(h.Key, h.Value)
 		}
