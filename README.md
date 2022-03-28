@@ -13,6 +13,14 @@ The variable can retrieve a file path or an URL from the configuration file.
 The application will look at the environment variable then loading configuration.
 If the variable does not exist in, then it will load the default one.
 
+For instance:
+
+    # URL based 
+    export MOCK_CONFIG_FILE=https://raw.githubusercontent.com/ru-rocker/mock-rest-api/main/config/mock.yaml
+
+    # File based
+    export MOCK_CONFIG_FILE=/tmp/mock.yaml
+
 For configuratioin file references, please visit `config/mock.yaml`.
 
 # Run
