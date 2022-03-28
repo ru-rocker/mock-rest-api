@@ -8,7 +8,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"ru-rocker.com/mock-rest-api/parser"
+	"github.com/ru-rocker/mock-rest-api/parser"
 )
 
 func CORSMiddleware(o parser.Options) gin.HandlerFunc {

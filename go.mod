@@ -1,4 +1,4 @@
-module ru-rocker.com/mock-rest-api
+module github.com/ru-rocker/mock-rest-api
 
 go 1.17
 
