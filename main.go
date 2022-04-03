@@ -49,12 +49,13 @@ func handler(r parser.Route) gin.HandlerFunc {
 		arr := regex.FindAllString(r.Endpoint, -1)
 
 		request_body := c.Request.Body
+		var request interface{}
+
 		request_value, err := ioutil.ReadAll(request_body)
 		if err != nil {
 			panic(err)
 		}
-		var request interface{}
-		err = json.Unmarshal(request_value, &request)
+		_ = json.Unmarshal(request_value, &request)
 		if err != nil {
 			panic(err)
 		}
