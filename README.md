@@ -60,6 +60,9 @@ Run the container
        -e MOCK_CONFIG_FILE=/tmp/rest-mock.yaml \
        rurocker/mock-rest-api:latest
 
+# More Explanation
+Visit https://www.ru-rocker.com/2022/04/03/mocking-rest-api-to-speed-up-development-time/ for detail explanation.
+
 # Support the creator
 If you want to show a little appreciation, you can put the donation to the creator :).
 
