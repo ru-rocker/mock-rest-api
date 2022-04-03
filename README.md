@@ -67,6 +67,7 @@ Here are the creator wallets:
 
 ##### ETH
 ![ETH](https://www.ru-rocker.com/wp-content/uploads/2022/04/ETH.jpeg | width=100)
+<img src="https://www.ru-rocker.com/wp-content/uploads/2022/04/ETH.jpeg" width="250">
 
 ##### BNB
 ![BNB](https://www.ru-rocker.com/wp-content/uploads/2022/04/BNB.jpeg | width=100)
