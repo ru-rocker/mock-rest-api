@@ -59,3 +59,14 @@ Run the container
        -v /your-config-folder/your-config.yaml:/tmp/rest-mock.yaml \
        -e MOCK_CONFIG_FILE=/tmp/rest-mock.yaml \
        rurocker/mock-rest-api:latest
+
+# Support the creator
+If you want to show a little appreciation, you can put the donation to the creator :).
+
+Here are the creator wallets:
+
+##### ETH
+![ETH](https://www.ru-rocker.com/wp-content/uploads/2022/04/ETH.jpeg)
+
+##### BNB
+![BNB](https://www.ru-rocker.com/wp-content/uploads/2022/04/BNB.jpeg)
