@@ -31,6 +31,11 @@ type Condition struct {
 	State string `yaml:"state"`
 }
 
+type Delay struct {
+	Min int `yaml:"min"`
+	Max int `yaml:"max"`
+}
+
 type Response struct {
 	StatusCode int `yaml:"statusCode"`
 	Headers    []struct {
@@ -38,6 +43,7 @@ type Response struct {
 		Value string `yaml:"value"`
 	} `yaml:"headers"`
 	Body      string    `yaml:"body"`
+	Delay     Delay     `yaml:"delay"`
 	Condition Condition `yaml:"condition"`
 }
 

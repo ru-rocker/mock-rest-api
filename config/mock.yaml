@@ -28,6 +28,10 @@ routes:
             "code": "409",
             "message": "Not OK"
           }
+        # delay the response in millisecond. Generate random milliseconds time in range. Put min == max for fix time.
+        delay: 
+          min: 0
+          max: 1000
         # Condition for this request  
         condition:
           # type: request_header, request_param, query_param and request_body
@@ -48,6 +52,9 @@ routes:
             "code": "200",
             "message": "OK"
           }
+        delay: 
+          min: 2000
+          max: 2000
         condition:
           type: request_header
           key: X_REQ_ID

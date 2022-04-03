@@ -3,10 +3,12 @@ package main
 import (
 	"encoding/json"
 	"io/ioutil"
+	"math/rand"
 	"os"
 	"regexp"
 	"sort"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/yalp/jsonpath"
@@ -74,6 +76,8 @@ func handler(r parser.Route) gin.HandlerFunc {
 			for _, h := range resp.Headers {
 				c.Header(h.Key, h.Value)
 			}
+			delay := resp.Delay
+			sleep := rand.Intn(delay.Max-delay.Min+1) + delay.Min
 
 			condition := resp.Condition
 			if condition.Type == "request_header" {
@@ -81,16 +85,19 @@ func handler(r parser.Route) gin.HandlerFunc {
 				header_value := c.Request.Header.Values(condition.Key)
 				if condition.State == "equal" {
 					if contains(header_value, condition.Value) {
+						time.Sleep(time.Duration(sleep) * time.Millisecond)
 						c.IndentedJSON(resp.StatusCode, raw)
 						break
 					}
 				} else if condition.State == "present" {
 					if header_key != "" {
+						time.Sleep(time.Duration(sleep) * time.Millisecond)
 						c.IndentedJSON(resp.StatusCode, raw)
 						break
 					}
 				} else if condition.State == "absent" {
 					if header_key == "" {
+						time.Sleep(time.Duration(sleep) * time.Millisecond)
 						c.IndentedJSON(resp.StatusCode, raw)
 						break
 					}
@@ -99,16 +106,19 @@ func handler(r parser.Route) gin.HandlerFunc {
 				request_param := c.Param(condition.Key)
 				if condition.State == "equal" {
 					if request_param == condition.Value {
+						time.Sleep(time.Duration(sleep) * time.Millisecond)
 						c.IndentedJSON(resp.StatusCode, raw)
 						break
 					}
 				} else if condition.State == "present" {
 					if request_param != "" {
+						time.Sleep(time.Duration(sleep) * time.Millisecond)
 						c.IndentedJSON(resp.StatusCode, raw)
 						break
 					}
 				} else if condition.State == "absent" {
 					if request_param == "" {
+						time.Sleep(time.Duration(sleep) * time.Millisecond)
 						c.IndentedJSON(resp.StatusCode, raw)
 						break
 					}
@@ -117,16 +127,19 @@ func handler(r parser.Route) gin.HandlerFunc {
 				query, ok := c.GetQueryArray(condition.Key)
 				if condition.State == "equal" {
 					if contains(query, condition.Value) {
+						time.Sleep(time.Duration(sleep) * time.Millisecond)
 						c.IndentedJSON(resp.StatusCode, raw)
 						break
 					}
 				} else if condition.State == "present" {
 					if ok {
+						time.Sleep(time.Duration(sleep) * time.Millisecond)
 						c.IndentedJSON(resp.StatusCode, raw)
 						break
 					}
 				} else if condition.State == "absent" {
 					if !ok {
+						time.Sleep(time.Duration(sleep) * time.Millisecond)
 						c.IndentedJSON(resp.StatusCode, raw)
 						break
 					}
@@ -135,21 +148,25 @@ func handler(r parser.Route) gin.HandlerFunc {
 				data, _ := jsonpath.Read(request, condition.Key)
 				if condition.State == "equal" {
 					if data == condition.Value {
+						time.Sleep(time.Duration(sleep) * time.Millisecond)
 						c.IndentedJSON(resp.StatusCode, raw)
 						break
 					}
 				} else if condition.State == "present" {
 					if data != nil {
+						time.Sleep(time.Duration(sleep) * time.Millisecond)
 						c.IndentedJSON(resp.StatusCode, raw)
 						break
 					}
 				} else if condition.State == "absent" {
 					if data == nil {
+						time.Sleep(time.Duration(sleep) * time.Millisecond)
 						c.IndentedJSON(resp.StatusCode, raw)
 						break
 					}
 				}
 			} else {
+				time.Sleep(time.Duration(sleep) * time.Millisecond)
 				c.IndentedJSON(resp.StatusCode, raw)
 				break
 			}

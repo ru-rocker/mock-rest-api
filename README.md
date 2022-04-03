@@ -23,6 +23,10 @@ For instance:
 
 For configuratioin file references, please visit `config/mock.yaml`.
 
+### Delay
+To make a more real situation, you can put delay parameter. The delay will generate a random number between the min and max values. Leave it empty if you do not want to set delay. Or set min == max for consistent delay value.
+
+### Conditional
 Additional notes: the routes support conditional return for each specific cases. 
 Worth noting that the conditions take the first matching rule.
 The precedences are how you locate your route condition in the yaml file. Smaller index always wins.
@@ -42,7 +46,7 @@ To run directly from the source
 # Dockerized
 To build the docker file - owner only :)
 
-    docker build -t rurocker/mock-rest-api:0.1 -t rurocker/mock-rest-api:latest .
+    docker build -t rurocker/mock-rest-api:0.3 -t rurocker/mock-rest-api:latest .
 
 
 This application is already on the docker hub.
