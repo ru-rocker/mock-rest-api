@@ -2,11 +2,14 @@ package main
 
 import (
 	"encoding/json"
+	"io/ioutil"
 	"os"
 	"regexp"
+	"sort"
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/yalp/jsonpath"
 
 	"github.com/ru-rocker/mock-rest-api/parser"
 )
@@ -34,27 +37,130 @@ func getenv(key, fallback string) string {
 	return fallback
 }
 
+func contains(s []string, searchterm string) bool {
+	i := sort.SearchStrings(s, searchterm)
+	return i < len(s) && s[i] == searchterm
+}
+
 func handler(r parser.Route) gin.HandlerFunc {
 
 	return func(c *gin.Context) {
 		regex, _ := regexp.Compile("\\/:[A-Za-z_]+")
 		arr := regex.FindAllString(r.Endpoint, -1)
-		body := r.Response.Body
-		for _, a := range arr {
-			val := c.Param(a[2:])
-			body = strings.Replace(body, a[1:], val, -1)
-		}
 
-		var raw map[string]interface{}
-		err := json.Unmarshal([]byte(body), &raw)
+		request_body := c.Request.Body
+		request_value, err := ioutil.ReadAll(request_body)
+		if err != nil {
+			panic(err)
+		}
+		var request interface{}
+		err = json.Unmarshal(request_value, &request)
 		if err != nil {
 			panic(err)
 		}
 
-		for _, h := range r.Response.Headers {
-			c.Header(h.Key, h.Value)
+		for _, resp := range r.Response {
+
+			body := resp.Body
+			for _, a := range arr {
+				val := c.Param(a[2:])
+				body = strings.Replace(body, a[1:], val, -1)
+			}
+
+			var raw map[string]interface{}
+			err := json.Unmarshal([]byte(body), &raw)
+			if err != nil {
+				panic(err)
+			}
+
+			for _, h := range resp.Headers {
+				c.Header(h.Key, h.Value)
+			}
+
+			condition := resp.Condition
+			if condition.Type == "request_header" {
+				header_key := c.Request.Header.Get(condition.Key)
+				header_value := c.Request.Header.Values(condition.Key)
+				if condition.State == "equal" {
+					if contains(header_value, condition.Value) {
+						c.IndentedJSON(resp.StatusCode, raw)
+						break
+					}
+				} else if condition.State == "present" {
+					if header_key != "" {
+						c.IndentedJSON(resp.StatusCode, raw)
+						break
+					}
+				} else if condition.State == "absent" {
+					if header_key == "" {
+						c.IndentedJSON(resp.StatusCode, raw)
+						break
+					}
+				}
+			} else if condition.Type == "request_param" {
+				request_param := c.Param(condition.Key)
+				if condition.State == "equal" {
+					if request_param == condition.Value {
+						c.IndentedJSON(resp.StatusCode, raw)
+						break
+					}
+				} else if condition.State == "present" {
+					if request_param != "" {
+						c.IndentedJSON(resp.StatusCode, raw)
+						break
+					}
+				} else if condition.State == "absent" {
+					if request_param == "" {
+						c.IndentedJSON(resp.StatusCode, raw)
+						break
+					}
+				}
+			} else if condition.Type == "query_param" {
+				query, ok := c.GetQueryArray(condition.Key)
+				if condition.State == "equal" {
+					if contains(query, condition.Value) {
+						c.IndentedJSON(resp.StatusCode, raw)
+						break
+					}
+				} else if condition.State == "present" {
+					if ok {
+						c.IndentedJSON(resp.StatusCode, raw)
+						break
+					}
+				} else if condition.State == "absent" {
+					if !ok {
+						c.IndentedJSON(resp.StatusCode, raw)
+						break
+					}
+				}
+			} else if condition.Type == "request_body" {
+				data, _ := jsonpath.Read(request, condition.Key)
+				if condition.State == "equal" {
+					if data == condition.Value {
+						c.IndentedJSON(resp.StatusCode, raw)
+						break
+					}
+				} else if condition.State == "present" {
+					if data != nil {
+						c.IndentedJSON(resp.StatusCode, raw)
+						break
+					}
+				} else if condition.State == "absent" {
+					if data == nil {
+						c.IndentedJSON(resp.StatusCode, raw)
+						break
+					}
+				}
+			} else {
+				c.IndentedJSON(resp.StatusCode, raw)
+				break
+			}
 		}
-		c.IndentedJSON(r.Response.StatusCode, raw)
+	}
+}
+
+func generateResponseRequestHeader() gin.HandlerFunc {
+	return func(c *gin.Context) {
 	}
 }
 

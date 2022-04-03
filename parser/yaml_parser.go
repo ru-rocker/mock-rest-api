@@ -24,17 +24,27 @@ type Options struct {
 	AccessControlAllowMethods     string `yaml:"accessControlAllowMethods"`
 }
 
+type Condition struct {
+	Type  string `yaml:"type"`
+	Key   string `yaml:"key"`
+	Value string `yaml:"value"`
+	State string `yaml:"state"`
+}
+
+type Response struct {
+	StatusCode int `yaml:"statusCode"`
+	Headers    []struct {
+		Key   string `yaml:"key"`
+		Value string `yaml:"value"`
+	} `yaml:"headers"`
+	Body      string    `yaml:"body"`
+	Condition Condition `yaml:"condition"`
+}
+
 type Route struct {
-	Method   string `yaml:"method"`
-	Endpoint string `yaml:"endpoint"`
-	Response struct {
-		StatusCode int `yaml:"statusCode"`
-		Headers    []struct {
-			Key   string `yaml:"key"`
-			Value string `yaml:"value"`
-		} `yaml:"headers"`
-		Body string `yaml:"body"`
-	} `yaml:"response"`
+	Method   string     `yaml:"method"`
+	Endpoint string     `yaml:"endpoint"`
+	Response []Response `yaml:"responses"`
 }
 
 func Parse_YAML(filename string) (Config, error) {

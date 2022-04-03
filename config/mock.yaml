@@ -16,65 +16,189 @@ routes:
     # endpoint target. Please notice the / character in the beginning endpoint.
     endpoint: /product
     # expected response
-    response:
-      # HTTP Response status code
-      statusCode: 201
-      # Custom response headers
-      headers:
-        - key: X-CUSTOM-HEADER
-          value: "1234567890"
-      # Response body.
-      body: |
-        {
-          "code": "200",
-          "message": "OK"
-        }
+    responses:
+      - statusCode: 409
+        # Custom response headers
+        headers:
+          - key: X-CUSTOM-HEADER
+            value: "1234567890"
+        # Response body.
+        body: |
+          {
+            "code": "409",
+            "message": "Not OK"
+          }
+        # Condition for this request  
+        condition:
+          # type: request_header, request_param, query_param and request_body
+          type: request_header
+          # the key. if the type is request_body, then it is in the form of json path.
+          key: X_REQ_ID
+          # request header value
+          value: ABC
+          # state for comparison: absent, present or equal. 
+          # For request param, absent state does not make sense. Do not put absent state if you type is request_param.
+          state: equal 
+      - statusCode: 201
+        headers:
+          - key: X-CUSTOM-HEADER
+            value: "1234567890"
+        body: |
+          {
+            "code": "200",
+            "message": "OK"
+          }
+        condition:
+          type: request_header
+          key: X_REQ_ID
+          value: 
+          state: present
+      - statusCode: 400
+        headers:
+          - key: X-CUSTOM-HEADER
+            value: "1234567890"
+        body: |
+          {
+            "code": "400",
+            "message": "Not OK"
+          }
+        condition:
+          type: request_header
+          key: X_REQ_ID
+          value: 
+          state: absent 
   - method: GET
     endpoint: /product
-    response:
-      statusCode: 200
-      headers:
-        - key: X-CUSTOM-HEADER
-          value: "1234567890"
-      body: |
-        {
-          "code": "200",
-          "message": "OK"
-        }
+    responses:
+      - statusCode: 200
+        headers:
+          - key: X-CUSTOM-HEADER
+            value: "1234567890"
+        body: |
+          {
+            "code": "200",
+            "message": "OK"
+          }
   - method: GET
     endpoint: /product/:product_id
-    response:
-      statusCode: 200
-      headers:
-        - key: X-CUSTOM-HEADER
-          value: "1234567890"
-      body: |
-        {
-          "code": "200",
-          "message": "OK"
-        }
+    responses:
+      - statusCode: 400
+        headers:
+          - key: X-CUSTOM-HEADER
+            value: "1234567890"
+        body: |
+          {
+            "code": "400",
+            "message": "Not OK"
+          }
+        condition:
+          type: request_param
+          key: product_id
+          value: 755
+          state: equal
+      - statusCode: 200
+        headers:
+          - key: X-CUSTOM-HEADER
+            value: "1234567890"
+        body: |
+          {
+            "code": "200",
+            "message": "OK"
+          }
+        condition:
+          type: request_param
+          key: product_id
+          value: 
+          state: present
   # Path variables endpoints. 
   # If you want to include your variables value in response,
   # just put in the body with variable as same as in the url.
   - method: GET
     endpoint: /product/:product_id/status/:status_id
-    response:
-      statusCode: 200
-      headers:
-        - key: X-CUSTOM-HEADER
-          value: "1234567890"
-      body: |
-        {
-          "code": "200",
-          "message": "OK",
-          "mock_id": ":product_id",
-          "status_id": ":status_id"
-        }
+    responses:
+      - statusCode: 200
+        headers:
+          - key: X-CUSTOM-HEADER
+            value: "1234567890"
+        body: |
+          {
+            "code": "200",
+            "message": "OK",
+            "mock_id": ":product_id",
+            "status_id": ":status_id"
+          }
   - method: DELETE
     endpoint: /product
-    response:
-      statusCode: 204
-      headers:
-        - key: X-CUSTOM-HEADER
-          value: "1234567890"
-      body:      
+    responses:
+      - statusCode: 204
+        headers:
+          - key: X-CUSTOM-HEADER
+            value: "1234567890"
+        body:
+  - method: GET
+    endpoint: /carts
+    responses:
+      - statusCode: 201
+        body: |
+          {
+            "code": "201",
+            "message": "OK"
+          }
+        condition:
+          type: query_param
+          key: id
+          value: 20
+          state: equal
+      - statusCode: 200
+        body: |
+          {
+            "code": "200",
+            "message": "OK"
+          }
+        condition:
+          type: query_param
+          key: id
+          value: 
+          state: present
+      - statusCode: 412
+        body: |
+          {
+            "code": "412",
+            "message": "Not OK"
+          }
+        condition:
+          type: query_param
+          key: id
+          value: 
+          state: absent
+  - method: POST
+    endpoint: /persons
+    responses:
+      - statusCode: 412
+        body: |
+          {
+            "code": "412",
+            "message": "Not OK"
+          }
+        condition:
+          type: request_body
+          key: $.firstName
+          value: 
+          state: absent
+      - statusCode: 409
+        body: |
+          {
+            "code": "409",
+            "message": "Not OK"
+          }
+        condition:
+          type: request_body
+          key: $.firstName
+          value: John Doe
+          state: equal
+      - statusCode: 201
+        body: |
+          {
+            "code": "201",
+            "message": "OK"
+          }

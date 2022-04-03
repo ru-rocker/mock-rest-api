@@ -23,6 +23,16 @@ For instance:
 
 For configuratioin file references, please visit `config/mock.yaml`.
 
+Additional notes: the routes support conditional return for each specific cases. 
+Worth noting that the conditions take the first matching rule.
+The precedences are how you locate your route condition in the yaml file. Smaller index always wins.
+
+There are 4 type of conditional rules:
+* request_header
+* request_param
+* query_param
+* request_body
+
 # Run
 To run directly from the source
 
