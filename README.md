@@ -21,7 +21,7 @@ For instance:
     # File based
     export MOCK_CONFIG_FILE=/tmp/mock.yaml
 
-For configuratioin file references, please visit `config/mock.yaml`.
+For configuration file references, please visit `config/mock.yaml`.
 
 ### Delay
 To make a more real situation, you can put delay parameter. The delay will generate a random number between the min and max values. Leave it empty if you do not want to set delay. Or set min == max for consistent delay value.
@@ -31,7 +31,7 @@ Additional notes: the routes support conditional return for each specific cases.
 Worth noting that the conditions take the first matching rule.
 The precedences are how you locate your route condition in the yaml file. Smaller index always wins.
 
-There are 4 type of conditional rules:
+There are 4 types of conditional rules:
 * request_header
 * request_param
 * query_param
