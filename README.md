@@ -68,8 +68,8 @@ If you want to show a little appreciation, you can put the donation to the creat
 
 Here are the creator wallets:
 
-##### ETH
-<img src="https://www.ru-rocker.com/wp-content/uploads/2022/04/ETH.jpeg" width="250">
+##### BTC
+<img src="https://www.ru-rocker.com/wp-content/uploads/2022/04/BTC.jpeg" width="250">
 
 ##### BNB
 <img src="https://www.ru-rocker.com/wp-content/uploads/2022/04/BNB.jpeg" width="250">
