@@ -56,9 +56,6 @@ func handler(r parser.Route) gin.HandlerFunc {
 			panic(err)
 		}
 		_ = json.Unmarshal(request_value, &request)
-		if err != nil {
-			panic(err)
-		}
 
 		for _, resp := range r.Response {
 
